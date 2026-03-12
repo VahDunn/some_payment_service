@@ -1,5 +1,5 @@
 from decimal import Decimal
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
@@ -17,12 +17,11 @@ async def test_acquiring_start_success():
         "bank_payment_id": "bank-123"
     }
 
-    mock_response = AsyncMock()
+    mock_response = Mock()
     mock_response.json.return_value = response_data
     mock_response.raise_for_status.return_value = None
 
-    with patch("httpx.AsyncClient.post", return_value=mock_response):
-
+    with patch("httpx.AsyncClient.post", new=AsyncMock(return_value=mock_response)):
         result = await client.acquiring_start(order_id=1, amount=Decimal("500.00"))
 
     assert result.bank_payment_id == "bank-123"
@@ -36,13 +35,12 @@ async def test_acquiring_start_bank_error():
         "error": "payment creation failed"
     }
 
-    mock_response = AsyncMock()
+    mock_response = Mock()
     mock_response.json.return_value = response_data
     mock_response.raise_for_status.return_value = None
 
-    with patch("httpx.AsyncClient.post", return_value=mock_response):
-
-        with pytest.raises(ExternalServiceError):
+    with patch("httpx.AsyncClient.post", new=AsyncMock(return_value=mock_response)):
+        with pytest.raises(ExternalServiceError, match="payment creation failed"):
             await client.acquiring_start(order_id=1, amount=100)
 
 
@@ -57,15 +55,15 @@ async def test_acquiring_check_success():
         "paid_at": None,
     }
 
-    mock_response = AsyncMock()
+    mock_response = Mock()
     mock_response.json.return_value = response_data
     mock_response.raise_for_status.return_value = None
 
-    with patch("httpx.AsyncClient.post", return_value=mock_response):
-
+    with patch("httpx.AsyncClient.post", new=AsyncMock(return_value=mock_response)):
         result = await client.acquiring_check("bank-123")
 
     assert result.bank_payment_id == "bank-123"
+    assert result.amount == Decimal("500.00")
     assert result.status == BankPaymentStatus.PAID
 
 
@@ -77,11 +75,10 @@ async def test_acquiring_check_payment_not_found():
         "error": "payment not found"
     }
 
-    mock_response = AsyncMock()
+    mock_response = Mock()
     mock_response.json.return_value = response_data
     mock_response.raise_for_status.return_value = None
 
-    with patch("httpx.AsyncClient.post", return_value=mock_response):
-
-        with pytest.raises(BankPaymentNotFoundError):
+    with patch("httpx.AsyncClient.post", new=AsyncMock(return_value=mock_response)):
+        with pytest.raises(BankPaymentNotFoundError, match="payment not found"):
             await client.acquiring_check("bank-123")
