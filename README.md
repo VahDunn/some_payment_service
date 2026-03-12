@@ -91,9 +91,8 @@ SQLAlchemy + PostgreSQL**.
 ## 1. Клонировать проект
 
     git clone <repository_url>
-    cd order-payments-service
 
-## 2. Поднять контейнеры
+## 2. Поднять контейнеры из корня проекта
 
     docker compose up --build -d
 
