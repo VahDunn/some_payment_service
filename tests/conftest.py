@@ -20,9 +20,17 @@ from app.service.payment_service import PaymentService
 def payment_repo() -> AsyncMock:
     repo = AsyncMock(spec=PaymentRepository)
     repo.db = AsyncMock()
-    repo.create = AsyncMock()
     repo.get_by_id = AsyncMock()
     repo.get_by_bank_payment_id = AsyncMock()
+
+    async def create_side_effect(payment: Payment):
+        if payment.id is None:
+            payment.id = 1
+        if payment.refunded_amount is None:
+            payment.refunded_amount = Decimal("0.00")
+        return payment
+
+    repo.create = AsyncMock(side_effect=create_side_effect)
     return repo
 
 

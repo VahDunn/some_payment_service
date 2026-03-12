@@ -13,9 +13,7 @@ from app.external.bank.exceptions import BankPaymentNotFoundError
 async def test_acquiring_start_success():
     client = BankApiClient(base_url="https://bank.api")
 
-    response_data = {
-        "bank_payment_id": "bank-123"
-    }
+    response_data = {"bank_payment_id": "bank-123"}
 
     mock_response = Mock()
     mock_response.json.return_value = response_data
@@ -31,9 +29,7 @@ async def test_acquiring_start_success():
 async def test_acquiring_start_bank_error():
     client = BankApiClient(base_url="https://bank.api")
 
-    response_data = {
-        "error": "payment creation failed"
-    }
+    response_data = {"error": "payment creation failed"}
 
     mock_response = Mock()
     mock_response.json.return_value = response_data
@@ -71,9 +67,7 @@ async def test_acquiring_check_success():
 async def test_acquiring_check_payment_not_found():
     client = BankApiClient(base_url="https://bank.api")
 
-    response_data = {
-        "error": "payment not found"
-    }
+    response_data = {"error": "payment not found"}
 
     mock_response = Mock()
     mock_response.json.return_value = response_data

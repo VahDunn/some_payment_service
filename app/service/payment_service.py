@@ -100,7 +100,9 @@ class PaymentService:
             raise ConflictError("Bank payment id is missing")
 
         try:
-            bank_state = await self._bank_client.acquiring_check(payment.bank_payment_id)
+            bank_state = await self._bank_client.acquiring_check(
+                payment.bank_payment_id,
+            )
         except BankPaymentNotFoundError:
             payment.bank_status = BankPaymentStatus.UNKNOWN
             payment.bank_error = "payment not found in bank"

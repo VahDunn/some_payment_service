@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.api.deps.services import get_order_service
 from app.schemas.order import OrderOut
-from app.services.order_service import OrderService
+from app.service.order_service import OrderService
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 

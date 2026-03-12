@@ -1,11 +1,11 @@
 from fastapi import Depends
 
-from app.external.bank.client import BankApiClient
-from app.repositories.order_repo import OrderRepository
-from app.repositories.payment_repo import PaymentRepository
-from app.services.order_service import OrderService
-from app.services.payment_service import PaymentService
 from app.api.deps.repos import get_order_repo, get_payment_repo
+from app.external.bank.client import BankApiClient
+from app.repo.order_repo import OrderRepository
+from app.repo.payment_repo import PaymentRepository
+from app.service.order_service import OrderService
+from app.service.payment_service import PaymentService
 
 
 def get_bank_client() -> BankApiClient:

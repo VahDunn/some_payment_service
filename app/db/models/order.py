@@ -28,6 +28,4 @@ class Order(BaseORM):
         cascade="all, delete-orphan",
     )
 
-    __table_args__ = (
-        sa.CheckConstraint("amount > 0", name="ck_orders_amount_gt_0"),
-    )
+    __table_args__ = (sa.CheckConstraint("amount > 0", name="ck_orders_amount_gt_0"),)

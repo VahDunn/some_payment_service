@@ -1,10 +1,8 @@
-from decimal import Decimal
-
 from fastapi import APIRouter, Depends, status
 
 from app.api.deps.services import get_payment_service
 from app.schemas.payment import PaymentCreateParams, PaymentOut, PaymentRefundParams
-from app.services.payment_service import PaymentService
+from app.service.payment_service import PaymentService
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 

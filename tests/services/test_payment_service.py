@@ -188,7 +188,9 @@ async def test_refund_payment_invalid_status(
     )
     payment_repo.get_by_id.return_value = payment
 
-    with pytest.raises(ConflictError, match="Only succeeded/refunded payments can be refunded"):
+    with pytest.raises(
+        ConflictError, match="Only succeeded/refunded payments can be refunded"
+    ):
         await payment_service.refund(payment_id=10, amount=Decimal("50.00"))
 
 
@@ -208,7 +210,9 @@ async def test_refund_payment_amount_exceeds_available_refund(
     )
     payment_repo.get_by_id.return_value = payment
 
-    with pytest.raises(ValidationError, match="Refund amount exceeds available refund amount"):
+    with pytest.raises(
+        ValidationError, match="Refund amount exceeds available refund amount"
+    ):
         await payment_service.refund(payment_id=10, amount=Decimal("100.00"))
 
 
@@ -316,7 +320,9 @@ async def test_sync_acquiring_payment_for_cash_forbidden(
     )
     payment_repo.get_by_id.return_value = payment
 
-    with pytest.raises(ConflictError, match="Sync is available only for acquiring payments"):
+    with pytest.raises(
+        ConflictError, match="Sync is available only for acquiring payments"
+    ):
         await payment_service.sync_acquiring_payment(payment_id=10)
 
 
@@ -357,7 +363,9 @@ async def test_sync_acquiring_payment_not_found_in_bank(
         bank_status=BankPaymentStatus.NEW,
     )
     payment_repo.get_by_id.return_value = payment
-    bank_client.acquiring_check.side_effect = BankPaymentNotFoundError("payment not found")
+    bank_client.acquiring_check.side_effect = BankPaymentNotFoundError(
+        "payment not found"
+    )
 
     result = await payment_service.sync_acquiring_payment(payment_id=11)
 
