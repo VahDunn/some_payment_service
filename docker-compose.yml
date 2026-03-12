@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: payments_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${APP_CONFIG__DB_NAME}
+      POSTGRES_USER: ${APP_CONFIG__DB_USER}
+      POSTGRES_PASSWORD: ${APP_CONFIG__DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: payments_app
+    restart: unless-stopped
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      APP_CONFIG__DB_HOST: db
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_data:
